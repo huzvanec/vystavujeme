@@ -134,10 +134,9 @@
 	});
 
 	const floor = useLoader(TextureLoader).load('/textures/floor.png');
-	floor.then((resultTexture) => {
-		resultTexture.wrapS = RepeatWrapping;
-		resultTexture.wrapT = RepeatWrapping;
-		resultTexture.repeat.set(5, 5);
+	floor.then((texture) => {
+		texture.wrapS = texture.wrapT = RepeatWrapping;
+		texture.repeat.set(5, 5);
 	});
 </script>
 
@@ -156,8 +155,8 @@
 	<!--	<GLTF scale={0.1} position={[0, 0.3, 0]} url="/marco polo-transformed.glb" bind:gltf={$gltf} />-->
 	<!--	<Polo scale={0.09} />-->
 	<AntiqueGlobe scale={10} position={[-7, 3, 0]} />
-		<FlatEarth position={[5, 1, 5]} />
-		<TadeasHaenke position={[-5, 2, 5]} rotation={[0, Math.PI / 2, 0]} />
+	<FlatEarth position={[5, 1, 5]} />
+	<TadeasHaenke position={[-5, 2, 5]} rotation={[0, Math.PI / 2, 0]} />
 	<!--	<T.DirectionalLight position={[-5, 10, 5]} intensity={Math.PI * 3} />-->
 	<!--	<T.Mesh position.y={1}>-->
 	<!--		<T.SphereGeometry args={[1]} />-->

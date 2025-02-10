@@ -13,7 +13,6 @@ const intersections: Intersection[] = [];
 let mouseDown: boolean = false;
 
 const start = () => {
-	console.log('init');
 	init = true;
 	const canvasWrapper: HTMLDivElement = store.canvasWrapper!;
 	canvasWrapper.addEventListener('mousedown', (event) => {
@@ -53,7 +52,6 @@ const start = () => {
 };
 
 export const registerRaycast = (obj: Object3D, onClick: () => void) => {
-	console.log('registered');
 	objects.push(obj);
 	callbacks.push(onClick);
 	if (!init) start();
