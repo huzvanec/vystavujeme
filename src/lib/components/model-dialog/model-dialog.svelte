@@ -18,7 +18,7 @@
 		DialogFooter
 	} from '$lib/components/ui/dialog';
 	import { onMount } from 'svelte';
-	import { store } from '$lib/scene-store.svelte.js';
+	import { store } from '$lib/scene-store.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { XIcon } from 'lucide-svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
@@ -47,16 +47,21 @@
 	}}
 >
 	<DialogContent
-		class="flex h-[75%] max-w-[75%] flex-col"
+		class="flex max-w-[75%] flex-col"
 		escapeKeydownBehavior="ignore"
 		onOpenAutoFocus={(event) => event.preventDefault()}
 	>
 		<DialogTitle class="text-4xl">{title}</DialogTitle>
-		<ScrollArea class="h-full" type="always">
-			<div class={cn('text mr-4 flex flex-col gap-2 text-xl', className)} {...restProps}>
-				{@html content}
-			</div>
-		</ScrollArea>
+		<div class="h-full">
+			<ScrollArea class="h-full" type="always">
+				<div
+					class={cn('text mr-4 flex max-h-[65svh] flex-col gap-2 text-xl', className)}
+					{...restProps}
+				>
+					{@html content}
+				</div>
+			</ScrollArea>
+		</div>
 		<DialogFooter>
 			<DialogClose>
 				<Button>

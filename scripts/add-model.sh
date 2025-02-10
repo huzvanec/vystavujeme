@@ -1,7 +1,7 @@
 #!/bin/bash
 
 INPUT=$(realpath "$1")
-STATIC=$(realpath static)
+STATIC=$(realpath static/models)
 MODELS=$(realpath src/lib/components/models)
 
 TEMP=$(realpath "$(mktemp -d -p .)")

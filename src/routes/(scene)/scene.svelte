@@ -20,8 +20,13 @@
 	import { T, useLoader, useTask, useThrelte } from '@threlte/core';
 	import {
 		AntiqueGlobeModel,
-		HernanCortesPaintingModel,
 		GeocentricFlatEarthModel,
+		HernanCortesPaintingModel,
+		HorseModel,
+		IgnatiusOfLoyolaPaintingModel,
+		MarcoPoloBustModel,
+		MexicoValleyPaintingModel,
+		SantaMariaModel,
 		ThaddeusHaenkePaintingModel
 	} from '$lib/components/models';
 	import { store } from '$lib/scene-store.svelte';
@@ -32,9 +37,12 @@
 	import { onMount } from 'svelte';
 	import { useSuspense } from '@threlte/extras';
 	import {
-		IgnatiusOfLoyolaPaintingModel,
-		MarcoPoloBustModel,
-		MexicoValleyPaintingModel
+		CrossModel,
+		SlaveModel,
+		SpiceModel,
+		SyphillisSkullModel,
+		ViracochaGodStatueModel,
+		VoyagesMapModel
 	} from '$lib/components/models/index.js';
 
 	const { dom, invalidate } = useThrelte();
@@ -135,25 +143,38 @@
 <T.DirectionalLight position={[0, 10, 0]} intensity={0.2} />
 <T.AmbientLight intensity={0.8} />
 <T.Group>
-	<AntiqueGlobeModel scale={10} position={[-7, 3, 0]} />
-	<GeocentricFlatEarthModel position={[5, 1, 5]} />
+	<AntiqueGlobeModel scale={10} position={[-7, 3, 3]} />
+	<GeocentricFlatEarthModel position={[9, 1, 6]} rotation={[0, -Math.PI / 2, 0]} />
 	<ThaddeusHaenkePaintingModel
-		position={[-9.93, 2.5, 18]}
+		position={[-9.93, 2.5, 16]}
 		scale={1.5}
 		rotation={[0, Math.PI / 2, 0]}
 	/>
-	<IgnatiusOfLoyolaPaintingModel
-		position={[-9.93, 2.5, 15]}
-		scale={1.5}
-		rotation={[0, Math.PI / 2, 0]}
-	/>
-	<MexicoValleyPaintingModel position={[-10.1, 1, 11]} scale={2} rotation={[0, Math.PI / 2, 0]} />
+	<MexicoValleyPaintingModel position={[-10.1, 1, 11.7]} scale={2} rotation={[0, Math.PI / 2, 0]} />
 	<HernanCortesPaintingModel
 		position={[-9.93, 2.5, 5.3]}
 		scale={1.5}
 		rotation={[0, Math.PI / 2, 0]}
 	/>
 	<MarcoPoloBustModel scale={0.15} position={[-9, 0, 2]} rotation={[0, Math.PI / 2, 0]} />
+	<VoyagesMapModel position={[10.2, 2, 0]} rotation={[Math.PI / 2, 0, Math.PI / 2]} />
+	<ViracochaGodStatueModel scale={0.015} rotation={[0, Math.PI / 2, 0]} position={[9.5, 2, -6]} />
+	<SyphillisSkullModel scale={0.7} position={[3, 2, -13]} rotation={[0, -Math.PI / 2, 0]} />
+	<SpiceModel scale={0.07} position={[-5, 1, -18]} />
+	<SlaveModel scale={0.089} position={[0, 0, -18]} />
+	<HorseModel scale={0.5} rotation={[0, -Math.PI / 2, 0]} position={[5, 1.2, -18]} />
+	<SantaMariaModel scale={0.7} rotation={[0, -Math.PI / 2, 0]} position={[1, 0.7, -7]} />
+	<T.Group>
+		<CrossModel scale={0.15} rotation={[0, -Math.PI / 2, 0]} position={[7, 2.5, 11]} />
+		<CrossModel scale={0.07} rotation={[0, -Math.PI / 2, 0]} position={[7, 1.2, 11]} />
+		<CrossModel scale={0.1} rotation={[0, -Math.PI / 2, 0]} position={[7, 1.7, 13]} />
+		<CrossModel scale={0.05} rotation={[0, -Math.PI / 2, 0]} position={[7, 0.8, 13]} />
+	</T.Group>
+	<IgnatiusOfLoyolaPaintingModel
+		position={[9.93, 2.5, 18]}
+		scale={1.5}
+		rotation={[0, -Math.PI / 2, 0]}
+	/>
 </T.Group>
 
 <!-- Floor -->
