@@ -1,6 +1,7 @@
 <script lang="ts" module>
 	// room settings
-	const roomSize = { x: 20, y: 10, z: 40 } as const;
+	const roomSize = { x: 20, y: 6, z: 40 } as const;
+	const wallWidth = 1;
 	// camera settings
 	const cameraStartPosition = { x: 0, z: 18 } as const;
 	const cameraHeight = 1.8;
@@ -10,11 +11,14 @@
 	const cameraZoomMin = 1;
 	const cameraZoomMax = 4;
 	const cameraZoomSpeed = 2;
+	// collision settings
+	const cameraCollision = 1e-3; // how much to move the camera from the wall when it collides
+	const wallSpace = 0.1; // how far is the wall from the collision point
 </script>
 
 <script lang="ts">
 	import { T, useLoader, useTask, useThrelte } from '@threlte/core';
-	import { AntiqueGlobe, FlatEarth, TadeasHaenke } from '$lib/components/models';
+	import { AntiqueGlobe, Cortes, FlatEarth, TadeasHaenke } from '$lib/components/models';
 	import { store } from '$lib/scene-store.svelte';
 	import { PerspectiveCamera, RepeatWrapping, TextureLoader } from 'three';
 	import { CameraControls } from '$lib/camera-controls';
@@ -22,6 +26,7 @@
 	import { CameraRaycasting } from '$lib/components/camera-raycasting';
 	import { onMount } from 'svelte';
 	import { useSuspense } from '@threlte/extras';
+	import { Ignatius, Mexico } from '$lib/components/models/index.js';
 
 	const { dom, invalidate } = useThrelte();
 
@@ -81,12 +86,11 @@
 
 			const xBoundary = roomSize.x / 2;
 			const zBoundary = roomSize.z / 2;
-			const collision = 1e-3;
 
-			if (x <= -xBoundary) controls.moveTo(-xBoundary + collision, y, z);
-			else if (x >= xBoundary) controls.moveTo(xBoundary - collision, y, z);
-			else if (z <= -zBoundary) controls.moveTo(x, y, -zBoundary + collision);
-			else if (z >= zBoundary) controls.moveTo(x, y, zBoundary - collision);
+			if (x <= -xBoundary) controls.moveTo(-xBoundary + cameraCollision, y, z);
+			else if (x >= xBoundary) controls.moveTo(xBoundary - cameraCollision, y, z);
+			else if (z <= -zBoundary) controls.moveTo(x, y, -zBoundary + cameraCollision);
+			else if (z >= zBoundary) controls.moveTo(x, y, zBoundary - cameraCollision);
 			if (controls.update(delta)) invalidate();
 		},
 		{ autoInvalidate: false }
@@ -94,10 +98,22 @@
 
 	const suspend = useSuspense();
 
-	const floor = suspend(useLoader(TextureLoader).load('/textures/floor.png'));
+	const floor = suspend(useLoader(TextureLoader).load('/textures/floor.jpg'));
 	floor.then((texture) => {
 		texture.wrapS = texture.wrapT = RepeatWrapping;
-		texture.repeat.set(5, 5);
+		texture.repeat.set(roomSize.x / 4, roomSize.z / 8);
+	});
+
+	const wallX = suspend(useLoader(TextureLoader).load('/textures/wall-x.jpg'));
+	wallX.then((texture) => {
+		texture.wrapS = texture.wrapT = RepeatWrapping;
+		texture.repeat.set(roomSize.x / 10, 1);
+	});
+
+	const wallZ = suspend(useLoader(TextureLoader).load('/textures/wall-z.jpg'));
+	wallZ.then((texture) => {
+		texture.wrapS = texture.wrapT = RepeatWrapping;
+		texture.repeat.set(roomSize.z / 10, 1);
 	});
 </script>
 
@@ -107,18 +123,41 @@
 <T is={camera} makeDefault />
 
 <!-- Exhibition -->
-<T.DirectionalLight position={[0, 10, 0]} intensity={1} />
-<T.AmbientLight intensity={0.3} />
+<T.DirectionalLight position={[0, 10, 0]} intensity={0.2} />
+<T.AmbientLight intensity={0.8} />
 <T.Group>
 	<AntiqueGlobe scale={10} position={[-7, 3, 0]} />
 	<FlatEarth position={[5, 1, 5]} />
-	<TadeasHaenke position={[-5, 2, 5]} rotation={[0, Math.PI / 2, 0]} />
+	<TadeasHaenke position={[-9.93, 2.5, 18]} scale={1.5} rotation={[0, Math.PI / 2, 0]} />
+	<Ignatius position={[-9.93, 2.5, 15]} scale={1.5} rotation={[0, Math.PI / 2, 0]} />
+	<Mexico position={[-10.1, 1, 11]} scale={2} rotation={[0, Math.PI / 2, 0]} />
+	<Cortes position={[-9.93, 2.5, 5.3]} scale={1.5} rotation={[0, Math.PI / 2, 0]} />
 </T.Group>
 
 <!-- Floor -->
 {#if $floor}
 	<T.Mesh receiveShadow>
-		<T.BoxGeometry args={[roomSize.x, 0.01, roomSize.z]} />
+		<T.BoxGeometry args={[roomSize.x + wallSpace * 2, 0.01, roomSize.z + wallSpace * 2]} />
 		<T.MeshStandardMaterial map={$floor} />
+	</T.Mesh>
+{/if}
+
+<!-- Walls -->
+{#if $wallZ && $wallX}
+	<T.Mesh receiveShadow position={[-roomSize.x / 2 - wallWidth / 2 - wallSpace, roomSize.y / 2, 0]}>
+		<T.BoxGeometry args={[wallWidth, roomSize.y, roomSize.z + wallWidth * 2]} />
+		<T.MeshStandardMaterial map={$wallZ} />
+	</T.Mesh>
+	<T.Mesh receiveShadow position={[roomSize.x / 2 + wallWidth / 2 + wallSpace, roomSize.y / 2, 0]}>
+		<T.BoxGeometry args={[wallWidth, roomSize.y, roomSize.z + wallWidth * 2]} />
+		<T.MeshStandardMaterial map={$wallZ} />
+	</T.Mesh>
+	<T.Mesh receiveShadow position={[0, roomSize.y / 2, -roomSize.z / 2 - wallWidth / 2 - wallSpace]}>
+		<T.BoxGeometry args={[roomSize.x + wallWidth * 2, roomSize.y, wallWidth]} />
+		<T.MeshStandardMaterial map={$wallX} />
+	</T.Mesh>
+	<T.Mesh receiveShadow position={[0, roomSize.y / 2, roomSize.z / 2 + wallWidth / 2 + wallSpace]}>
+		<T.BoxGeometry args={[roomSize.x + wallWidth * 2, roomSize.y, wallWidth]} />
+		<T.MeshStandardMaterial map={$wallX} />
 	</T.Mesh>
 {/if}
