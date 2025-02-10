@@ -14,3 +14,14 @@ export function cn(...inputs: ClassValue[]) {
  */
 export const useGltf = <Graph extends SceneGraph = undefined>(url: string) =>
 	_useGltf<Graph>(url, { dracoLoader: useDraco() });
+
+export const inject = (node: Element, argument: string = 'body') => {
+	const targetNode = document.querySelector(argument);
+	targetNode!.appendChild(node);
+
+	return {
+		destroy() {
+			node.remove();
+		}
+	};
+};
