@@ -18,7 +18,12 @@
 
 <script lang="ts">
 	import { T, useLoader, useTask, useThrelte } from '@threlte/core';
-	import { AntiqueGlobe, Cortes, FlatEarth, TadeasHaenke } from '$lib/components/models';
+	import {
+		AntiqueGlobeModel,
+		HernanCortesPaintingModel,
+		GeocentricFlatEarthModel,
+		ThaddeusHaenkePaintingModel
+	} from '$lib/components/models';
 	import { store } from '$lib/scene-store.svelte';
 	import { PerspectiveCamera, RepeatWrapping, TextureLoader } from 'three';
 	import { CameraControls } from '$lib/camera-controls';
@@ -26,7 +31,11 @@
 	import { CameraRaycasting } from '$lib/components/camera-raycasting';
 	import { onMount } from 'svelte';
 	import { useSuspense } from '@threlte/extras';
-	import { Ignatius, Mexico } from '$lib/components/models/index.js';
+	import {
+		IgnatiusOfLoyolaPaintingModel,
+		MarcoPoloBustModel,
+		MexicoValleyPaintingModel
+	} from '$lib/components/models/index.js';
 
 	const { dom, invalidate } = useThrelte();
 
@@ -126,12 +135,25 @@
 <T.DirectionalLight position={[0, 10, 0]} intensity={0.2} />
 <T.AmbientLight intensity={0.8} />
 <T.Group>
-	<AntiqueGlobe scale={10} position={[-7, 3, 0]} />
-	<FlatEarth position={[5, 1, 5]} />
-	<TadeasHaenke position={[-9.93, 2.5, 18]} scale={1.5} rotation={[0, Math.PI / 2, 0]} />
-	<Ignatius position={[-9.93, 2.5, 15]} scale={1.5} rotation={[0, Math.PI / 2, 0]} />
-	<Mexico position={[-10.1, 1, 11]} scale={2} rotation={[0, Math.PI / 2, 0]} />
-	<Cortes position={[-9.93, 2.5, 5.3]} scale={1.5} rotation={[0, Math.PI / 2, 0]} />
+	<AntiqueGlobeModel scale={10} position={[-7, 3, 0]} />
+	<GeocentricFlatEarthModel position={[5, 1, 5]} />
+	<ThaddeusHaenkePaintingModel
+		position={[-9.93, 2.5, 18]}
+		scale={1.5}
+		rotation={[0, Math.PI / 2, 0]}
+	/>
+	<IgnatiusOfLoyolaPaintingModel
+		position={[-9.93, 2.5, 15]}
+		scale={1.5}
+		rotation={[0, Math.PI / 2, 0]}
+	/>
+	<MexicoValleyPaintingModel position={[-10.1, 1, 11]} scale={2} rotation={[0, Math.PI / 2, 0]} />
+	<HernanCortesPaintingModel
+		position={[-9.93, 2.5, 5.3]}
+		scale={1.5}
+		rotation={[0, Math.PI / 2, 0]}
+	/>
+	<MarcoPoloBustModel scale={0.15} position={[-9, 0, 2]} rotation={[0, Math.PI / 2, 0]} />
 </T.Group>
 
 <!-- Floor -->

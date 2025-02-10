@@ -18,7 +18,7 @@
 		DialogFooter
 	} from '$lib/components/ui/dialog';
 	import { onMount } from 'svelte';
-	import { store } from '$lib/scene-store.svelte';
+	import { store } from '$lib/scene-store.svelte.js';
 	import { Button } from '$lib/components/ui/button';
 	import { XIcon } from 'lucide-svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';

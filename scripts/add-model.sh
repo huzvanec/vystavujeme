@@ -10,7 +10,7 @@ echo "Workdir: $TEMP"
 cd "$TEMP" || exit
 
 echo "Optimizing: $1"
-pnpm dlx @threlte/gltf@latest "$INPUT" --transform --resolution 4096 --types --suspense
+pnpm dlx @threlte/gltf@latest "$INPUT" --transform --resolution 4096 --types --suspense --simplify
 
 echo "Applying results..."
 mv ./*.glb "$STATIC"
