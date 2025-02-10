@@ -18,11 +18,11 @@
 		DialogFooter
 	} from '$lib/components/ui/dialog';
 	import { onMount } from 'svelte';
-	import { registerRaycast } from '$lib/raycasting';
 	import { store } from '$lib/scene-store.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { XIcon } from 'lucide-svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
+	import { registerClick } from '$lib/components/camera-raycasting';
 	import { cn } from '$lib/utils';
 
 	let { model, text, class: className, ...restProps }: ModelDialogProps = $props();
@@ -33,7 +33,7 @@
 	const content = split.slice(1).join('\n');
 
 	onMount(() => {
-		registerRaycast(model!, () => {
+		registerClick(model!, () => {
 			open = true;
 			store.controls!.unlockPointer();
 		});

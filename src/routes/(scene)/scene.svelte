@@ -1,15 +1,12 @@
 <script lang="ts">
-	// noinspection ES6UnusedImports
 	import { T, useLoader, useTask, useThrelte } from '@threlte/core';
-	import { interactivity } from '@threlte/extras';
 	import { Spring } from 'svelte/motion';
-	import { AntiqueGlobe, FlatEarth } from '$lib/components/models';
+	import { AntiqueGlobe, FlatEarth, TadeasHaenke } from '$lib/components/models';
 	import { store } from '$lib/scene-store.svelte';
-	import { TadeasHaenke } from '$lib/components/models/index.js';
 	import { PerspectiveCamera, RepeatWrapping, TextureLoader } from 'three';
 	import { CameraControls } from '$lib/camera-controls';
-
-	interactivity();
+	import { CameraMovement, movement } from '$lib/components/camera-movement';
+	import { CameraRaycasting } from '$lib/components/camera-raycasting';
 
 	const { dom, invalidate } = useThrelte();
 
@@ -44,23 +41,23 @@
 	});
 
 	const speed = 5;
-
 	useTask(
 		(delta) => {
-			switch (lateral) {
+			const distance: number = delta * speed;
+			switch (movement.lateral) {
 				case 'right':
-					controls.truck(delta * speed, 0, true);
+					controls.truck(distance, 0, true);
 					break;
 				case 'left':
-					controls.truck(-delta * speed, 0, true);
+					controls.truck(-distance, 0, true);
 					break;
 			}
-			switch (longitudinal) {
+			switch (movement.longitudinal) {
 				case 'forwards':
-					controls.forward(delta * speed, true);
+					controls.forward(distance, true);
 					break;
 				case 'backwards':
-					controls.forward(-delta * speed, true);
+					controls.forward(-distance, true);
 					break;
 			}
 			const x = camera.position.x;
@@ -80,59 +77,6 @@
 	// loading = false;
 	// });
 
-	let longitudinal = $state<'forwards' | 'backwards' | null>(null);
-	let lateral = $state<'left' | 'right' | null>(null);
-
-	addEventListener('keydown', (event) => {
-		switch (event.key) {
-			case 'w':
-			case 'ArrowUp':
-				longitudinal = 'forwards';
-				event.preventDefault();
-				break;
-			case 'a':
-			case 'ArrowLeft':
-				lateral = 'left';
-				event.preventDefault();
-				break;
-			case 'd':
-			case 'ArrowRight':
-				lateral = 'right';
-				event.preventDefault();
-				break;
-			case 's':
-			case 'ArrowDown':
-				longitudinal = 'backwards';
-				event.preventDefault();
-				break;
-		}
-	});
-
-	addEventListener('keyup', (event) => {
-		switch (event.key) {
-			case 'w':
-			case 'ArrowUp':
-				if (longitudinal === 'forwards') longitudinal = null;
-				event.preventDefault();
-				break;
-			case 's':
-			case 'ArrowDown':
-				if (longitudinal === 'backwards') longitudinal = null;
-				event.preventDefault();
-				break;
-			case 'a':
-			case 'ArrowLeft':
-				if (lateral === 'left') lateral = null;
-				event.preventDefault();
-				break;
-			case 'd':
-			case 'ArrowRight':
-				if (lateral === 'right') lateral = null;
-				event.preventDefault();
-				break;
-		}
-	});
-
 	const floor = useLoader(TextureLoader).load('/textures/floor.png');
 	floor.then((texture) => {
 		texture.wrapS = texture.wrapT = RepeatWrapping;
@@ -144,6 +88,8 @@
 <!--	<OrbitControls />-->
 <!--</T.PerspectiveCamera>-->
 
+<CameraMovement />
+<CameraRaycasting />
 <T is={camera} makeDefault />
 
 <T.DirectionalLight position={[0, 10, 0]} intensity={1} />
@@ -183,7 +129,7 @@
 <!--<Grid cellColor="#FE3D00" sectionColor="#FE3D00" />-->
 {#if $floor}
 	<T.Mesh receiveShadow>
-		<T.BoxGeometry args={[20, 0.01, 20]} />
+		<T.BoxGeometry args={[20, 0.01, 40]} />
 		<T.MeshStandardMaterial map={$floor} />
 	</T.Mesh>
 {/if}
