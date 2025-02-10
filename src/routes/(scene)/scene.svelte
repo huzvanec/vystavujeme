@@ -1,16 +1,29 @@
+<script lang="ts" module>
+	// room settings
+	const roomSize = { x: 20, y: 10, z: 40 } as const;
+	// camera settings
+	const cameraStartPosition = { x: 0, z: 18 } as const;
+	const cameraHeight = 1.8;
+	const cameraStartRotation = { azimuth: 0, polar: Math.PI / 2 } as const; // radians
+	const cameraRotationSpeed = 0.6;
+	const cameraMovementSpeed = 5;
+	const cameraZoomMin = 1;
+	const cameraZoomMax = 4;
+	const cameraZoomSpeed = 2;
+</script>
+
 <script lang="ts">
 	import { T, useLoader, useTask, useThrelte } from '@threlte/core';
-	import { Spring } from 'svelte/motion';
 	import { AntiqueGlobe, FlatEarth, TadeasHaenke } from '$lib/components/models';
 	import { store } from '$lib/scene-store.svelte';
 	import { PerspectiveCamera, RepeatWrapping, TextureLoader } from 'three';
 	import { CameraControls } from '$lib/camera-controls';
 	import { CameraMovement, movement } from '$lib/components/camera-movement';
 	import { CameraRaycasting } from '$lib/components/camera-raycasting';
+	import { onMount } from 'svelte';
+	import { useSuspense } from '@threlte/extras';
 
 	const { dom, invalidate } = useThrelte();
-
-	const scale: Spring<number> = new Spring(1);
 
 	const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 100);
 	camera.position.set(0, 0, 1e-5);
@@ -24,26 +37,27 @@
 			CameraControls.ACTION.ROTATE;
 	controls.touches.two = CameraControls.ACTION.TOUCH_ZOOM_TRUCK;
 	controls.touches.three = CameraControls.ACTION.NONE;
-	controls.dollySpeed = 2;
 	controls.draggingSmoothTime = 0;
-	controls.minZoom = 1;
-	controls.maxZoom = 4;
-	controls.moveTo(2, 2, 2);
+	controls.minZoom = cameraZoomMin;
+	controls.maxZoom = cameraZoomMax;
+	controls.dollySpeed = cameraZoomSpeed;
+	controls.moveTo(cameraStartPosition.x, cameraHeight, cameraStartPosition.z);
+	controls.rotateTo(cameraStartRotation.azimuth, cameraStartRotation.polar);
 	store.camera = camera;
 	store.controls = controls;
 
 	// Dispose camera controls on unmount
-	$effect(() => () => controls.dispose());
+	onMount(() => () => controls.dispose());
 
 	$effect(() => {
 		const touchMode = !store.cursorLocked;
-		controls.azimuthRotateSpeed = controls.polarRotateSpeed = 0.6 * (touchMode ? -1 : 1);
+		controls.azimuthRotateSpeed = controls.polarRotateSpeed =
+			cameraRotationSpeed * (touchMode ? -1 : 1);
 	});
 
-	const speed = 5;
 	useTask(
 		(delta) => {
-			const distance: number = delta * speed;
+			const distance: number = delta * cameraMovementSpeed;
 			switch (movement.lateral) {
 				case 'right':
 					controls.truck(distance, 0, true);
@@ -60,76 +74,51 @@
 					controls.forward(-distance, true);
 					break;
 			}
+
 			const x = camera.position.x;
+			const y = camera.position.y;
 			const z = camera.position.z;
-			const limit = 10;
-			if (x <= -limit || x >= limit || z <= -limit || z >= limit) controls.moveTo(0, 2, 0, true);
+
+			const xBoundary = roomSize.x / 2;
+			const zBoundary = roomSize.z / 2;
+			const collision = 1e-3;
+
+			if (x <= -xBoundary) controls.moveTo(-xBoundary + collision, y, z);
+			else if (x >= xBoundary) controls.moveTo(xBoundary - collision, y, z);
+			else if (z <= -zBoundary) controls.moveTo(x, y, -zBoundary + collision);
+			else if (z >= zBoundary) controls.moveTo(x, y, zBoundary - collision);
 			if (controls.update(delta)) invalidate();
 		},
 		{ autoInvalidate: false }
 	);
 
-	// let gltf = $state<ThrelteGltf>();
-	//
-	// loading = true;
-	// useGltf('/animated/AnimatedCube.gltf').then((result) => {
-	// 	gltf = result;
-	// loading = false;
-	// });
+	const suspend = useSuspense();
 
-	const floor = useLoader(TextureLoader).load('/textures/floor.png');
+	const floor = suspend(useLoader(TextureLoader).load('/textures/floor.png'));
 	floor.then((texture) => {
 		texture.wrapS = texture.wrapT = RepeatWrapping;
 		texture.repeat.set(5, 5);
 	});
 </script>
 
-<!--<T.PerspectiveCamera makeDefault position={[10, 10, 10]}>-->
-<!--	<OrbitControls />-->
-<!--</T.PerspectiveCamera>-->
-
+<!-- Camera -->
 <CameraMovement />
 <CameraRaycasting />
 <T is={camera} makeDefault />
 
+<!-- Exhibition -->
 <T.DirectionalLight position={[0, 10, 0]} intensity={1} />
 <T.AmbientLight intensity={0.3} />
-<T.Group onpointerenter={() => (scale.target = 1.5)} onpointerleave={() => (scale.target = 1)}>
-	<!--{#if gltf}-->
-	<!--	<T is={gltf.scene} scale={0.01} />-->
-	<!--{/if}-->
-	<!--	<GLTF scale={0.1} position={[0, 0.3, 0]} url="/marco polo-transformed.glb" bind:gltf={$gltf} />-->
-	<!--	<Polo scale={0.09} />-->
+<T.Group>
 	<AntiqueGlobe scale={10} position={[-7, 3, 0]} />
 	<FlatEarth position={[5, 1, 5]} />
 	<TadeasHaenke position={[-5, 2, 5]} rotation={[0, Math.PI / 2, 0]} />
-	<!--	<T.DirectionalLight position={[-5, 10, 5]} intensity={Math.PI * 3} />-->
-	<!--	<T.Mesh position.y={1}>-->
-	<!--		<T.SphereGeometry args={[1]} />-->
-	<!--		<T.MeshStandardMaterial color="#FE3D00" toneMapped={false} />-->
-	<!--	</T.Mesh>-->
 </T.Group>
 
-<T.Mesh position={[10, 0, 0]}>
-	<T.BoxGeometry args={[1, 1, 1]} />
-	<T.MeshStandardMaterial color="red" />
-</T.Mesh>
-<T.Mesh position={[-10, 0, 0]}>
-	<T.BoxGeometry args={[1, 1, 1]} />
-	<T.MeshStandardMaterial color="green" />
-</T.Mesh>
-<T.Mesh position={[0, 0, 10]}>
-	<T.BoxGeometry args={[1, 1, 1]} />
-	<T.MeshStandardMaterial color="yellow" />
-</T.Mesh>
-<T.Mesh position={[0, 0, -10]}>
-	<T.BoxGeometry args={[1, 1, 1]} />
-	<T.MeshStandardMaterial color="blue" />
-</T.Mesh>
-<!--<Grid cellColor="#FE3D00" sectionColor="#FE3D00" />-->
+<!-- Floor -->
 {#if $floor}
 	<T.Mesh receiveShadow>
-		<T.BoxGeometry args={[20, 0.01, 40]} />
+		<T.BoxGeometry args={[roomSize.x, 0.01, roomSize.z]} />
 		<T.MeshStandardMaterial map={$floor} />
 	</T.Mesh>
 {/if}
