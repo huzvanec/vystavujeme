@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
-	import { store } from '$lib/scene-store.svelte';
+	import { store } from '$lib/scene-store.svelte.js';
 	import { PlusIcon } from 'lucide-svelte';
 </script>
 

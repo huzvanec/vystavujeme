@@ -36,7 +36,7 @@
 		ViracochaGodStatueModel,
 		VoyagesMapModel
 	} from '$lib/components/models';
-	import { store } from '$lib/scene-store.svelte';
+	import { store } from '$lib/scene-store.svelte.js';
 	import { PerspectiveCamera, RepeatWrapping, TextureLoader } from 'three';
 	import { CameraControls } from '$lib/camera-controls';
 	import { CameraMovement, movement } from '$lib/components/camera-movement';
@@ -49,7 +49,7 @@
 		DividingCompassModel,
 		ProportionalCompassModel,
 		SpyglassModel
-	} from '$lib/components/models/index.js';
+	} from '$lib/components/models';
 
 	const { dom, invalidate } = useThrelte();
 
@@ -151,7 +151,7 @@
 <T.Group>
 	<AntiqueGlobeModel scale={10} position={[-7, 3, 3]} />
 	<GeocentricFlatEarthModel position={[9, 1, 6]} rotation={[0, -Math.PI / 2, 0]} />
-	<ThaddeusHaenkePaintingModel position={[5.3 , 2.5, 19.9]} scale={1.5} rotation={[0, Math.PI, 0]} />
+	<ThaddeusHaenkePaintingModel position={[5.3, 2.5, 19.9]} scale={1.5} rotation={[0, Math.PI, 0]} />
 	<MexicoValleyPaintingModel position={[-10.1, 1, 14.7]} scale={2} rotation={[0, Math.PI / 2, 0]} />
 	<HernanCortesPaintingModel position={[-6.5, 2.5, 19.9]} scale={1.5} rotation={[0, Math.PI, 0]} />
 	<MarcoPoloBustModel scale={0.15} position={[-9, 0, 9]} rotation={[0, Math.PI / 2, 0]} />
