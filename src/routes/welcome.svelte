@@ -12,7 +12,13 @@
 	import CreditsDialog from './credits.svelte';
 	import { store } from '$lib/scene-store.svelte.js';
 
-	let { open = $bindable() }: { open: boolean } = $props();
+	let { open: openProp }: { open: boolean } = $props();
+
+	let open = $state<boolean>(openProp);
+
+	$effect(() => {
+		open = openProp && !store.cursorLocked && !store.visitingObject;
+	})
 </script>
 
 <Dialog

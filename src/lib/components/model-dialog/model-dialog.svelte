@@ -49,6 +49,10 @@
 			store.controls!.unlockPointer();
 		});
 	});
+
+	$effect(() => {
+		store.visitingObject = open;
+	})
 </script>
 
 <Dialog

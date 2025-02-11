@@ -7,7 +7,9 @@ export const store = $state<{
 	crosshairActive: boolean;
 	canvasWrapper?: HTMLDivElement;
 	cursorLocked: boolean;
+	visitingObject: boolean;
 }>({
 	cursorLocked: false,
-	crosshairActive: false
+	crosshairActive: false,
+	visitingObject: false
 });
