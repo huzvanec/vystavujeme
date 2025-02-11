@@ -38,6 +38,7 @@
 				<p>Lukáš Javorek</p>
 				<p>Matěj Hochman</p>
 				<p>Michal Diviš</p>
+				<p>Vilém Srb</p>
 				<h1>Tvorba webových stránek</h1>
 				<p>Lukáš Javorek</p>
 
