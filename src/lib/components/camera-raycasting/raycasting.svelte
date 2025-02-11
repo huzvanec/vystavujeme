@@ -42,7 +42,7 @@
 			intersections.length = 0;
 			raycaster.intersectObjects(objects, true, intersections);
 			const intersection = intersections[0];
-			if (!intersection || intersection.distance > 4) {
+			if (!intersection || intersection.distance > 8) {
 				store.crosshairActive = false;
 				return;
 			}

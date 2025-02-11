@@ -20,6 +20,8 @@
 	import { T, useLoader, useTask, useThrelte } from '@threlte/core';
 	import {
 		AntiqueGlobeModel,
+		CompassModel,
+		CrossModel,
 		GeocentricFlatEarthModel,
 		HernanCortesPaintingModel,
 		HorseModel,
@@ -27,7 +29,12 @@
 		MarcoPoloBustModel,
 		MexicoValleyPaintingModel,
 		SantaMariaModel,
-		ThaddeusHaenkePaintingModel
+		SlaveModel,
+		SpiceModel,
+		SyphilisSkullModel,
+		ThaddeusHaenkePaintingModel,
+		ViracochaGodStatueModel,
+		VoyagesMapModel
 	} from '$lib/components/models';
 	import { store } from '$lib/scene-store.svelte';
 	import { PerspectiveCamera, RepeatWrapping, TextureLoader } from 'three';
@@ -37,12 +44,11 @@
 	import { onMount } from 'svelte';
 	import { useSuspense } from '@threlte/extras';
 	import {
-		CrossModel,
-		SlaveModel,
-		SpiceModel,
-		SyphillisSkullModel,
-		ViracochaGodStatueModel,
-		VoyagesMapModel
+		AstrolabeModel,
+		DiptychSundialModel,
+		DividingCompassModel,
+		ProportionalCompassModel,
+		SpyglassModel
 	} from '$lib/components/models/index.js';
 
 	const { dom, invalidate } = useThrelte();
@@ -145,21 +151,13 @@
 <T.Group>
 	<AntiqueGlobeModel scale={10} position={[-7, 3, 3]} />
 	<GeocentricFlatEarthModel position={[9, 1, 6]} rotation={[0, -Math.PI / 2, 0]} />
-	<ThaddeusHaenkePaintingModel
-		position={[-9.93, 2.5, 16]}
-		scale={1.5}
-		rotation={[0, Math.PI / 2, 0]}
-	/>
-	<MexicoValleyPaintingModel position={[-10.1, 1, 11.7]} scale={2} rotation={[0, Math.PI / 2, 0]} />
-	<HernanCortesPaintingModel
-		position={[-9.93, 2.5, 5.3]}
-		scale={1.5}
-		rotation={[0, Math.PI / 2, 0]}
-	/>
-	<MarcoPoloBustModel scale={0.15} position={[-9, 0, 2]} rotation={[0, Math.PI / 2, 0]} />
+	<ThaddeusHaenkePaintingModel position={[5.3 , 2.5, 19.9]} scale={1.5} rotation={[0, Math.PI, 0]} />
+	<MexicoValleyPaintingModel position={[-10.1, 1, 14.7]} scale={2} rotation={[0, Math.PI / 2, 0]} />
+	<HernanCortesPaintingModel position={[-6.5, 2.5, 19.9]} scale={1.5} rotation={[0, Math.PI, 0]} />
+	<MarcoPoloBustModel scale={0.15} position={[-9, 0, 9]} rotation={[0, Math.PI / 2, 0]} />
 	<VoyagesMapModel position={[10.2, 2, 0]} rotation={[Math.PI / 2, 0, Math.PI / 2]} />
 	<ViracochaGodStatueModel scale={0.015} rotation={[0, Math.PI / 2, 0]} position={[9.5, 2, -6]} />
-	<SyphillisSkullModel scale={0.7} position={[3, 2, -13]} rotation={[0, -Math.PI / 2, 0]} />
+	<SyphilisSkullModel scale={0.7} position={[3, 2, -13]} rotation={[0, -Math.PI / 2, 0]} />
 	<SpiceModel scale={0.07} position={[-5, 1, -18]} />
 	<SlaveModel scale={0.089} position={[0, 0, -18]} />
 	<HorseModel scale={0.5} rotation={[0, -Math.PI / 2, 0]} position={[5, 1.2, -18]} />
@@ -174,6 +172,24 @@
 		position={[9.93, 2.5, 18]}
 		scale={1.5}
 		rotation={[0, -Math.PI / 2, 0]}
+	/>
+	<DiptychSundialModel
+		scale={0.012}
+		position={[-9, 1, -6]}
+		rotation={[0, Math.PI / 2 + Math.PI / 6, 0]}
+	/>
+	<AstrolabeModel scale={0.07} position={[-9, 1.5, -10]} />
+	<SpyglassModel scale={8} position={[-9, 1.5, -18]} rotation={[0, Math.PI / 2, 0]} />
+	<ProportionalCompassModel
+		scale={0.7}
+		position={[-9, 1.5, -2]}
+		rotation={[Math.PI / 2, Math.PI / 4, Math.PI / 2]}
+	/>
+	<DividingCompassModel scale={0.1} position={[-9, 1, 2]} rotation={[0, Math.PI / 2, 0]} />
+	<CompassModel
+		scale={0.7}
+		position={[-9, 1.5, 5]}
+		rotation={[-Math.PI / 2, -Math.PI / 4, -Math.PI / 2]}
 	/>
 </T.Group>
 

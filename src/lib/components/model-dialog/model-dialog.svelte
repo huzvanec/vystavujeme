@@ -24,12 +24,15 @@
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import { registerClick } from '$lib/components/camera-raycasting';
 	import { cn } from '$lib/utils';
+	import { DialogDescription } from '$lib/components/ui/dialog/index.js';
 
 	let { model, text, class: className, ...restProps }: ModelDialogProps = $props();
 	let open = $state<boolean>(false);
 
-	const split = text.split('\n');
-	const title = split[0];
+	const split: string[] = text.split('\n');
+	const titleSplit: string[] = split[0].split('|');
+	const title: string = titleSplit[0];
+	const description: string = titleSplit.slice(1).join('\n');
 	const content = split.slice(1).join('\n');
 
 	onMount(() => {
@@ -52,6 +55,7 @@
 		onOpenAutoFocus={(event) => event.preventDefault()}
 	>
 		<DialogTitle class="text-4xl">{title}</DialogTitle>
+		<DialogDescription class="whitespace-pre text-wrap text-lg">{description}</DialogDescription>
 		<div class="h-full">
 			<ScrollArea class="h-full" type="always">
 				<div
