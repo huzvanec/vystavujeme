@@ -10,7 +10,7 @@ Tuto výstavu v našem podání si si můžete projít na svém počítači na h
 
 - Originální modely se nacházejí v [/models](https://github.com/huzvanec/vystavujeme/tree/master/models).
 - Kompresované modely (většinou použitím [add-model.sh](https://github.com/huzvanec/vystavujeme/blob/master/scripts/add-model.sh)) jsou v [/static/models](https://github.com/huzvanec/vystavujeme/tree/master/static/models).
-- Texty k modelům se nacházejí v [/src/lib/texts](https://github.com/huzvanec/vystavujeme/tree/master/src/lib/texts), první řádek každého HTML souoru značí nadis a popisek každého modelu.
+- Texty k modelům se nacházejí v [/src/lib/texts](https://github.com/huzvanec/vystavujeme/tree/master/src/lib/texts), první řádek každého HTML souoru značí nadis a popisek modelu.
 
 ## Buildování
 
