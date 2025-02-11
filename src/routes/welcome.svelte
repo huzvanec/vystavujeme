@@ -8,7 +8,7 @@
 		DialogTitle
 	} from '$lib/components/ui/dialog';
 	import { Button } from '$lib/components/ui/button';
-	import { XIcon } from 'lucide-svelte';
+	import { FootprintsIcon } from 'lucide-svelte';
 	import CreditsDialog from './credits.svelte';
 	import { store } from '$lib/scene-store.svelte.js';
 
@@ -43,7 +43,7 @@
 			</CreditsDialog>
 			<DialogClose>
 				<Button>
-					<XIcon /> Zavřít
+					<FootprintsIcon /> Procházet výstavu
 				</Button>
 			</DialogClose>
 		</DialogFooter>
