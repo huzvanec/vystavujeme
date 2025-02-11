@@ -40,7 +40,11 @@
 				<p>Michal Diviš</p>
 				<p>Vilém Srb</p>
 				<h1>Tvorba webových stránek</h1>
-				<p>Lukáš Javorek (<a target="_blank" href="https://github.com/huzvanec/vystavujeme">zdrojový kód</a>)</p>
+				<p>
+					Lukáš Javorek (<a target="_blank" href="https://github.com/huzvanec/vystavujeme"
+						>zdrojový kód</a
+					>)
+				</p>
 
 				<div class="flex flex-col text-gray-400">
 					<h1>Autoři modelů</h1>
