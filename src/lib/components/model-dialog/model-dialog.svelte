@@ -52,7 +52,7 @@
 
 	$effect(() => {
 		store.visitingObject = open;
-	})
+	});
 </script>
 
 <Dialog
