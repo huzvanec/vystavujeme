@@ -14,15 +14,11 @@
 
 	let { open: openProp }: { open: boolean } = $props();
 
-	let open = $state<boolean>(openProp);
-
-	$effect(() => {
-		open = openProp && !store.cursorLocked && !store.visitingObject;
-	})
+	const open = $derived(openProp && !store.cursorLocked && !store.visitingObject);
 </script>
 
 <Dialog
-	bind:open
+	{open}
 	onOpenChange={(newOpen) => {
 		if (!newOpen) store.controls?.lockPointer();
 	}}
